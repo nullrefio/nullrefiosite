@@ -39,7 +39,6 @@
     .logo {
       font-size: 1.8rem;
       font-weight: 800;
-      letter-spacing: -2px;
     }
 
     .nav-links {
@@ -242,7 +241,7 @@
     /* Page sections below the hero */
     #philosophy,
     #contact {
-      padding: 80px 80px;
+      padding: 40px 80px;
       max-width: 1100px;
       margin: 0 auto;
     }
@@ -316,11 +315,8 @@
     blockquote {
       margin: 48px 0;
       padding: 24px 28px;
-      background: rgba(255, 255, 255, 0.04);
-      border-left: 4px solid #3b82f6;
-      border-radius: 8px;
+      border-left: 4px solid #aaaaaa;
       font-size: 1.2rem;
-      color: #f8fafc;
       font-weight: 500;
     }
 
@@ -338,7 +334,7 @@
 <body>
 
   <nav>
-    <div class="logo"></div>
+    <div class="logo">Christopher Davis</div>
 
     <ul class="nav-links">
       <li><a href="#philosophy">Engineering Philosophy</a></li>
@@ -396,7 +392,7 @@
     <div class="section-inner">
       <h2>Engineering Philosophy</h2>
 
-      <p class="intro">
+      <p>
         I believe great engineering is not measured by how much code is written,
         but by how effectively complexity is reduced.
       </p>
@@ -422,9 +418,8 @@
       <div class="section">
         <h3>Decoupled, Independent Systems</h3>
         <p>
-          Complexity scales rapidly when systems become tightly coupled. I
-          design loosely coupled services and task runners that can evolve
-          independently without creating cascading operational risk.
+          Complexity scales rapidly when systems become tightly coupled. I design loosely coupled services,
+          microservices, and task runners that can evolve independently without creating cascading operational risk.
         </p>
       </div>
 
@@ -442,6 +437,73 @@
 
         <p>The goal is to create systems that remain performant and cost-effective under scale.</p>
       </div>
+    </div>
+
+    <div class="section">
+      <h3>Sustainable Architecture</h3>
+      <p>
+        I focus on long-term maintainability by:
+      </p>
+      <ul>
+        <li>Refactoring legacy codebases using modern tooling and language features</li>
+        <li>Migrating systems to newer database providers and infrastructure platforms</li>
+        <li>Abstracting repetitive implementations into reusable frameworks and libraries</li>
+        <li>Generating scaffolding and automation that reduces engineering overhead</li>
+      </ul>
+
+      <p>
+        Good systems should become easier to maintain over time, not harder.
+      </p>
+    </div>
+
+    <div class="section">
+      <h3>Automation-Driven Development</h3>
+      <p>
+        Repetitive engineering work should be automated wherever possible.
+        I build generated frameworks and tooling that keep frontend and backend
+        systems synchronized automatically, reducing drift and improving
+        reliability.
+      </p>
+
+      <p>
+        This includes:
+      </p>
+
+      <ul>
+        <li>Generative OpenAPI integrations that prevent API contracts from becoming outdated</li>
+        <li>Custom scaffolding systems that accelerate development</li>
+        <li>Static analysis tooling that goes beyond linting to enforce consistency, quality, and architectural
+          standards</li>
+        <li>AI-assisted workflows that improve engineering velocity and code quality</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3>AI-Augmented Engineering</h3>
+      <p>
+        I use AI not as a replacement for engineering rigor, but as a force
+        multiplier for it. AI methodologies can significantly improve schema
+        generation, database design strategies, code quality analysis, and
+        developer productivity when integrated thoughtfully into the
+        development lifecycle.
+      </p>
+    </div>
+
+    <div class="section">
+      <h3>What I Optimize For</h3>
+      <p>At the core of my engineering philosophy is a simple idea:</p>
+
+      <blockquote>
+        Build systems that are easy to scale, easy to reason about,
+        and easy to change.
+      </blockquote>
+
+      <p>
+        The best architectures minimize operational burden, reduce cognitive
+        overhead for engineers, and create clear boundaries between systems.
+        Every decision should move the platform toward greater clarity,
+        resilience, and independence.
+      </p>
     </div>
   </section>
 
