@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DLY8LWRBSB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-DLY8LWRBSB');
+</script>
+
+
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Locumfy — Investor Deck</title>
+<style>
+  /* ── Reset & Base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal:   #00B4A6;
+    --teal-d: #008F84;
+    --navy:   #0A1628;
+    --slate:  #1E3050;
+    --sky:    #E6F8F7;
+    --white:  #FFFFFF;
+    --gray:   #F4F6F9;
+    --text:   #1A2740;
+    --muted:  #5A6A82;
+    --accent: #FF6B35;
+    --font:   'Segoe UI', system-ui, sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font); color: var(--text); background: var(--white); }
+
+  /* ── Navigation Dots ── */
+  #nav-dots {
+    position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 10px; z-index: 1000;
+  }
+  .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: rgba(255,255,255,0.4); border: 2px solid rgba(255,255,255,0.7);
+    cursor: pointer; transition: all 0.3s;
+  }
+  .dot.active, .dot:hover { background: var(--teal); border-color: var(--teal); transform: scale(1.3); }
+
+  /* ── Slide Base ── */
+  .slide {
+    min-height: 100vh; display: flex; flex-direction: column;
+    justify-content: center; padding: 60px 80px;
+    position: relative; overflow: hidden;
+  }
+  @media (max-width: 900px) { .slide { padding: 40px 24px; } }
+
+  /* ── Slide Themes ── */
+  .slide-dark  { background: var(--navy); color: var(--white); }
+  .slide-teal  { background: linear-gradient(135deg, var(--teal-d) 0%, var(--teal) 100%); color: var(--white); }
+  .slide-light { background: var(--gray); color: var(--text); }
+  .slide-white { background: var(--white); color: var(--text); }
+  .slide-slate { background: var(--slate); color: var(--white); }
+
+  /* ── Typography ── */
+  .eyebrow {
+    font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 12px;
+  }
+  .slide-dark .eyebrow, .slide-teal .eyebrow, .slide-slate .eyebrow { color: rgba(255,255,255,0.65); }
+  h1 { font-size: clamp(36px, 5vw, 64px); font-weight: 800; line-height: 1.05; }
+  h2 { font-size: clamp(28px, 3.5vw, 46px); font-weight: 800; line-height: 1.1; }
+  h3 { font-size: clamp(18px, 2vw, 24px); font-weight: 700; }
+  h4 { font-size: 16px; font-weight: 700; }
+  p  { font-size: clamp(14px, 1.5vw, 17px); line-height: 1.7; color: var(--muted); }
+  .slide-dark p, .slide-teal p, .slide-slate p { color: rgba(255,255,255,0.75); }
+  .highlight { color: var(--teal); }
+  .slide-teal .highlight { color: var(--white); text-decoration: underline; }
+
+  /* ── Slide Number ── */
+  .slide-num {
+    position: absolute; bottom: 28px; right: 40px;
+    font-size: 12px; font-weight: 600; opacity: 0.35; letter-spacing: 1px;
+  }
+
+  /* ── Decorative BG Circles ── */
+  .bg-circle {
+    position: absolute; border-radius: 50%; opacity: 0.06; pointer-events: none;
+  }
+
+  /* ── Layout Helpers ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .three-col { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; }
+  .four-col { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+  @media (max-width: 860px) {
+    .two-col, .three-col, .four-col { grid-template-columns: 1fr; }
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--white); border-radius: 16px; padding: 28px 24px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  }
+  .card-dark {
+    background: rgba(255,255,255,0.07); border-radius: 16px; padding: 28px 24px;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .card-teal {
+    background: var(--sky); border-radius: 16px; padding: 28px 24px;
+    border-left: 4px solid var(--teal);
+  }
+  .icon-circle {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--sky); display: flex; align-items: center; justify-content: center;
+    font-size: 24px; margin-bottom: 16px; flex-shrink: 0;
+  }
+  .icon-circle-dark {
+    background: rgba(0,180,166,0.18);
+  }
+
+  /* ── Stats ── */
+  .stat { text-align: center; }
+  .stat-num { font-size: clamp(36px, 4vw, 56px); font-weight: 900; color: var(--teal); line-height: 1; }
+  .slide-teal .stat-num, .slide-slate .stat-num { color: var(--white); }
+  .stat-label { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; opacity: 0.7; }
+
+  /* ── Screenshots ── */
+  .screenshots-row {
+    display: flex; gap: 16px; align-items: flex-end; justify-content: center;
+    flex-wrap: wrap;
+  }
+  .phone-wrap {
+    position: relative; flex-shrink: 0;
+  }
+  .phone-frame {
+    border-radius: 32px; overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    border: 3px solid rgba(255,255,255,0.2);
+  }
+  .phone-frame img { display: block; width: 100%; height: auto; }
+  .browser-frame {
+    border-radius: 12px; overflow: hidden;
+    box-shadow: 0 16px 50px rgba(0,0,0,0.3);
+    border: 2px solid rgba(255,255,255,0.15);
+  }
+  .browser-bar {
+    background: #1a2030; padding: 10px 16px; display: flex; align-items: center; gap: 8px;
+  }
+  .browser-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .browser-frame img { display: block; width: 100%; height: auto; }
+
+  /* ── Timeline ── */
+  .timeline { display: flex; gap: 0; position: relative; }
+  .timeline::before {
+    content: ''; position: absolute; top: 24px; left: 24px; right: 24px; height: 2px;
+    background: var(--teal); opacity: 0.3;
+  }
+  .tl-item { flex: 1; text-align: center; padding-top: 16px; }
+  .tl-dot {
+    width: 48px; height: 48px; border-radius: 50%; background: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px; font-weight: 800; font-size: 16px; color: var(--white);
+    position: relative; z-index: 1;
+  }
+  .tl-item h4 { font-size: 14px; margin-bottom: 6px; }
+  .tl-item p { font-size: 12px; }
+
+  /* ── Tag Pills ── */
+  .pill {
+    display: inline-block; padding: 4px 12px; border-radius: 999px;
+    font-size: 12px; font-weight: 700; background: var(--sky); color: var(--teal-d);
+    margin: 3px;
+  }
+  .pill-dark { background: rgba(0,180,166,0.2); color: #7FDED8; }
+
+  /* ── Quote Block ── */
+  .quote-block {
+    border-left: 4px solid var(--teal); padding-left: 20px;
+    font-size: clamp(16px, 2vw, 22px); font-style: italic; font-weight: 500; line-height: 1.5;
+  }
+
+  /* ── List ── */
+  .check-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .check-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; }
+  .check-list li::before {
+    content: '✓'; color: var(--teal); font-weight: 900; font-size: 16px; flex-shrink: 0; margin-top: 1px;
+  }
+  .slide-dark .check-list li, .slide-slate .check-list li { color: rgba(255,255,255,0.85); }
+
+  /* ── CTA Button ── */
+  .btn {
+    display: inline-block; padding: 14px 36px; border-radius: 8px;
+    font-weight: 700; font-size: 16px; text-decoration: none; cursor: pointer;
+  }
+  .btn-teal { background: var(--teal); color: var(--white); }
+  .btn-outline { border: 2px solid var(--white); color: var(--white); }
+
+  /* ── Section Label Stripe ── */
+  .stripe {
+    position: absolute; top: 0; left: 0; right: 0; height: 5px;
+    background: linear-gradient(90deg, var(--teal), var(--accent));
+  }
+
+  /* ── Divider ── */
+  .divider { height: 1px; background: rgba(0,0,0,0.07); margin: 24px 0; }
+  .divider-light { background: rgba(255,255,255,0.12); }
+
+  /* ── Lightbox ── */
+  #lightbox-overlay {
+    display: none; position: fixed; inset: 0; z-index: 9000;
+    background: rgba(5,12,25,0.93); align-items: center; justify-content: center;
+    flex-direction: column;
+  }
+  #lightbox-overlay.open { display: flex; }
+  #lightbox-stage {
+    position: relative; display: flex; align-items: center; justify-content: center;
+    width: 100%; flex: 1; gap: 24px;
+  }
+  #lightbox-img-wrap {
+    position: relative; display: flex; align-items: center; justify-content: center;
+  }
+  #lightbox-img {
+    max-height: 76vh; max-width: 360px; width: auto;
+    border-radius: 28px; box-shadow: 0 32px 80px rgba(0,0,0,0.7);
+    border: 3px solid rgba(255,255,255,0.15);
+    transition: opacity 0.2s;
+  }
+  #lightbox-img.fading { opacity: 0; }
+  .lb-arrow {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white); font-size: 28px; width: 52px; height: 52px;
+    border-radius: 50%; cursor: pointer; display: flex; align-items: center;
+    justify-content: center; transition: background 0.2s; flex-shrink: 0;
+    user-select: none;
+  }
+  .lb-arrow:hover { background: var(--teal); border-color: var(--teal); }
+  #lightbox-caption {
+    font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); text-align: center; padding: 12px 0 0;
+  }
+  #lightbox-counter {
+    font-size: 12px; color: rgba(255,255,255,0.35); text-align: center; margin-top: 4px;
+  }
+  #lightbox-thumbnails {
+    display: flex; gap: 10px; padding: 16px 24px; overflow-x: auto;
+    max-width: 100vw; justify-content: center; flex-wrap: wrap;
+  }
+  .lb-thumb {
+    width: 52px; border-radius: 10px; overflow: hidden; cursor: pointer;
+    border: 2px solid transparent; transition: border-color 0.2s, transform 0.2s;
+    flex-shrink: 0; opacity: 0.55; transition: opacity 0.2s;
+  }
+  .lb-thumb:hover, .lb-thumb.active { border-color: var(--teal); opacity: 1; transform: scale(1.08); }
+  .lb-thumb img { display: block; width: 100%; height: auto; }
+  #lightbox-close {
+    position: fixed; top: 20px; right: 28px; z-index: 9100;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white); font-size: 22px; width: 44px; height: 44px;
+    border-radius: 50%; cursor: pointer; display: flex; align-items: center;
+    justify-content: center; transition: background 0.2s;
+  }
+  #lightbox-close:hover { background: var(--accent); }
+  .phone-wrap.clickable { cursor: pointer; }
+  .phone-wrap.clickable:hover .phone-frame {
+    box-shadow: 0 24px 70px rgba(0,180,166,0.6);
+    transform: translateY(-4px);
+    transition: box-shadow 0.25s, transform 0.25s;
+  }
+  /* ── Web thumbnails ── */
+  .web-thumb { flex-shrink: 0; width: 155px; cursor: pointer; transition: transform 0.2s; }
+  .web-thumb:hover { transform: translateY(-4px); }
+  .web-thumb:hover .browser-frame { box-shadow: 0 16px 50px rgba(0,180,166,0.5); border-color: rgba(0,180,166,0.45); }
+  .web-thumb img { display: block; width: 100%; height: 80px; object-fit: cover; object-position: top; }
+  .web-thumb-label { font-size: 10px; color: rgba(255,255,255,0.45); text-align: center; margin-top: 6px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* Wider lightbox for landscape web screenshots */
+  #lightbox-overlay.web-mode #lightbox-img { max-width: min(900px, 85vw); border-radius: 8px; }
+</style>
+</head>
+<body>
+
+<!-- NAV DOTS -->
+<nav id="nav-dots">
+  <div class="dot active" onclick="scrollToSlide(0)" title="Cover"></div>
+  <div class="dot" onclick="scrollToSlide(1)" title="Problem"></div>
+  <div class="dot" onclick="scrollToSlide(2)" title="Solution"></div>
+  <div class="dot" onclick="scrollToSlide(3)" title="Platform"></div>
+  <div class="dot" onclick="scrollToSlide(4)" title="Mobile App"></div>
+  <div class="dot" onclick="scrollToSlide(5)" title="Web Platform"></div>
+  <div class="dot" onclick="scrollToSlide(6)" title="Data Intelligence"></div>
+  <div class="dot" onclick="scrollToSlide(7)" title="Market"></div>
+  <div class="dot" onclick="scrollToSlide(8)" title="Traction"></div>
+  <div class="dot" onclick="scrollToSlide(9)" title="Business Model"></div>
+  <div class="dot" onclick="scrollToSlide(10)" title="Roadmap"></div>
+  <div class="dot" onclick="scrollToSlide(11)" title="Team / Ask"></div>
+  <div class="dot" onclick="scrollToSlide(12)" title="Close"></div>
+</nav>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 1 — COVER -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="slide slide-dark" id="slide-0">
+  <div class="bg-circle" style="width:700px;height:700px;background:var(--teal);top:-200px;right:-200px;"></div>
+  <div class="bg-circle" style="width:400px;height:400px;background:var(--accent);bottom:-150px;left:-100px;"></div>
+
+  <div style="max-width:700px; position:relative; z-index:1;">
+    <div class="eyebrow">Investor Presentation · 2026</div>
+    <h1 style="margin-bottom:24px;">
+      The Professional Network<br/>
+      Built for <span class="highlight">Healthcare.</span>
+    </h1>
+    <p style="font-size:clamp(16px,2vw,20px); max-width:520px; margin-bottom:40px;">
+      Locumfy unifies hundreds of thousands of medical professionals across
+      nursing, therapy, and physician disciplines into one intelligent career
+      platform — powering jobs, connections, timesheets, and data-driven
+      recruitment at scale.
+    </p>
+  </div>
+
+  <div class="slide-num">1 / 13</div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 2 — THE PROBLEM -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="slide slide-light" id="slide-1">
+  <div class="stripe"></div>
+  <div style="max-width:1100px; margin:0 auto; width:100%;">
+    <div class="eyebrow">The Problem</div>
+    <h2 style="margin-bottom:8px;">Healthcare Talent is <span class="highlight">Fragmented</span></h2>
+    <p style="margin-bottom:48px; max-width:580px;">
+      Medical professionals bounce between dozens of siloed job boards and staffing portals,
+      while healthcare facilities struggle to find, verify, and engage qualified candidates.
+    </p>
+
+    <div class="three-col">
+      <div class="card">
+        <div class="icon-circle">🏥</div>
+        <h3 style="margin-bottom:10px;">Siloed Platforms</h3>
+        <p>Nurses, therapists, and physicians each have separate portals — no unified identity
+        or cross-discipline discovery for career-minded medical professionals.</p>
+      </div>
+      <div class="card">
+        <div class="icon-circle">📄</div>
+        <h3 style="margin-bottom:10px;">Resume Chaos</h3>
+        <p>Resumes are manually reformatted — inconsistently and repeatedly — every time a
+        candidate is submitted to a new hospital or facility. This wastes recruiter hours
+        and introduces errors.</p>
+      </div>
+      <div class="card">
+        <div class="icon-circle">🔍</div>
+        <h3 style="margin-bottom:10px;">No Engagement Layer</h3>
+        <p>LinkedIn is generic. Medical professionals have no career-specific social
+        network for news, peer connections, and verified credentials in one place.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num" style="color:var(--muted);">2 / 13</div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 3 — THE SOLUTION -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="slide slide-teal" id="slide-2">
+  <div class="bg-circle" style="width:600px;height:600px;background:var(--white);top:-200px;left:-150px;"></div>
+
+  <div style="max-width:1100px; margin:0 auto; width:100%; position:relative; z-index:1;">
+    <div class="eyebrow">The Solution</div>
+    <h2 style="margin-bottom:16px;">Introducing <strong>Locumfy</strong></h2>
+    <p style="font-size:clamp(15px,1.8vw,20px); max-width:640px; margin-bottom:48px;">
+      A LinkedIn-style platform purpose-built for healthcare — with verified credentials,
+      AI-powered resume parsing, automated anonymization, job matching, built-in
+      timesheets, and a professional social graph for medical careers.
+    </p>
+
+    <div class="four-col" style="gap:20px;">
+      <div class="card-dark">
+        <div style="font-size:28px; margin-bottom:12px;">🤝</div>
+        <h4 style="margin-bottom:8px; color:var(--white);">Professional Network</h4>
+        <p style="font-size:13px;">Connect across disciplines. AI-suggested links based on shared employers, schools, and specialties.</p>
+      </div>
+      <div class="card-dark">
+        <div style="font-size:28px; margin-bottom:12px;">💼</div>
+        <h4 style="margin-bottom:8px; color:var(--white);">Unified Job Search</h4>
+        <p style="font-size:13px;">Internal and external positions across all Jackson brands surfaced in one intelligent feed.</p>
+      </div>
+      <div class="card-dark">
+        <div style="font-size:28px; margin-bottom:12px;">🧾</div>
+        <h4 style="margin-bottom:8px; color:var(--white);">Digital Timesheets</h4>
+        <p style="font-size:13px;">Mobile-first timesheet submission and approval — eliminating paper and manual billing delays.</p>
+      </div>
+      <div class="card-dark">
+        <div style="font-size:28px; margin-bottom:12px;">🔬</div>
+        <h4 style="margin-bottom:8px; color:var(--white);">Verified Data</h4>
+        <p style="font-size:13px;">NPI database integration auto-populates licenses, DEA, Medicare numbers, and state credentials.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">3 / 13</div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 4 — PLATFORM OVERVIEW -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="slide slide-white" id="slide-3">
+  <div class="stripe"></div>
+  <div style="max-width:1100px; margin:0 auto; width:100%;">
+    <div class="eyebrow">Platform Architecture</div>
+    <h2 style="margin-bottom:8px;">One Platform. <span class="highlight">Two Experiences.</span></h2>
+    <p style="margin-bottom:48px; max-width:580px;">
+      A native mobile app for professionals on the go, and a full web portal
+      for facilities, recruiters, and administrators.
+    </p>
+
+    <div class="two-col" style="gap:40px;">
+      <div class="card-teal">
+        <div style="font-size:36px; margin-bottom:12px;">📱</div>
+        <h3 style="margin-bottom:16px;">Mobile App — For Professionals</h3>
+        <ul class="check-list">
+          <li>Profile with verified credentials & specialties</li>
+          <li>Job search, applications, and status tracking</li>
+          <li>Professional social network & messaging</li>
+          <li>Digital timesheet submission</li>
+          <li>News feed & career notifications</li>
+        </ul>
+      </div>
+      <div class="card-teal">
+        <div style="font-size:36px; margin-bottom:12px;">🖥️</div>
+        <h3 style="margin-bottom:16px;">Web Portal — For Facilities & Recruiters</h3>
+        <ul class="check-list">
+          <li>Candidate discovery by specialty, license, and location</li>
+          <li>Job posting & applicant pipeline management</li>
+          <li>Auto-anonymized resume export for facility submission</li>
+          <li>Timesheet review and approval workflows</li>
+          <li>Messaging and offer coordination</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num" style="color:var(--muted);">4 / 13</div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 5 — MOBILE APP SCREENSHOTS -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="slide slide-dark" id="slide-4">
+  <div class="bg-circle" style="width:500px;height:500px;background:var(--teal);bottom:-200px;right:-100px;"></div>
+
+  <div style="max-width:1200px; margin:0 auto; width:100%; position:relative; z-index:1;">
+    <div class="eyebrow">Product — Mobile</div>
+    <h2 style="margin-bottom:8px;">Career in Your <span class="highlight">Pocket</span></h2>
+    <p style="margin-bottom:40px; max-width:500px;">
+      From login to timesheet submission, the Locumfy mobile app covers every step
+      of a healthcare professional's daily workflow.
+    </p>
+
+    <p style="font-size:12px; color:rgba(255,255,255,0.4); margin-bottom:20px; margin-top:-20px; font-style:italic;">Click any screen to view full slideshow ↓</p>
+    <div class="screenshots-row" style="align-items:flex-end;">
+      <div class="phone-wrap clickable" onclick="openLightbox(1)">
+        <div style="font-size:11px; color:rgba(255,255,255,0.45); text-align:center; margin-bottom:8px; font-weight:600; letter-spacing:1px; text-transform:uppercase;">Profile</div>
+        <div class="phone-frame" style="width:160px;">
+          <img src="mobile/profile.png" alt="Profile screen" />
+        </div>
+      </div>
+      <div class="phone-wrap clickable" onclick="openLightbox(7)">
+        <div style="font-size:11px; color:rgba(255,255,255,0.45); text-align:center; margin-bottom:8px; font-weight:600; letter-spacing:1px; text-transform:uppercase;">My Network</div>
+        <div class="phone-frame" style="width:160px;">
+          <img src="mobile/network.png" alt="My Network screen" />
+        </div>
+      </div>
+      <div class="phone-wrap clickable" onclick="openLightbox(6)">
+        <div style="font-size:11px; color:var(--teal); text-align:center; margin-bottom:8px; font-weight:700; letter-spacing:1px; text-transform:uppercase;">Jobs</div>
+        <div class="phone-frame" style="width:180px; box-shadow: 0 24px 70px rgba(0,180,166,0.5);">
+          <img src="mobile/jobs.png" alt="Jobs screen" />
+        </div>
+      </div>
+      <div class="phone-wrap clickable" onclick="openLightbox(11)">
+        <div style="font-size:11px; color:rgba(255,255,255,0.45); text-align:center; margin-bottom:8px; font-weight:600; letter-spacing:1px; text-transform:uppercase;">Timesheets</div>
+        <div class="phone-frame" style="width:160px;">
+          <img src="mobile/timesheets1.png" alt="Timesheets screen" />
+        </div>
+      </div>
+      <div class="phone-wrap clickable" onclick="openLightbox(9)">
+        <div style="font-size:11px; color:rgba(255,255,255,0.45); text-align:center; margin-bottom:8px; font-weight:600; letter-spacing:1px; text-transform:uppercase;">Messaging</div>
+        <div class="phone-frame" style="width:160px;">
+          <img src="mobile/messaging1.png" alt="Messaging screen" />
+        </div>
+      </div>
+      <div class="phone-wrap clickable" onclick="openLightbox(2)">
+        <div style="font-size:11px; color:rgba(255,255,255,0.45); text-align:center; margin-bottom:8px; font-weight:600; letter-spacing:1px; text-transform:uppercase;">Me</div>
+        <div class="phone-frame" style="width:160px;">
+          <img src="mobile/me1.png" alt="Me screen" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">5 / 13</div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 6 — WEB PORTAL SCREENSHOTS -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="slide slide-slate" id="slide-5">
+  <div style="max-width:1300px; margin:0 auto; width:100%;">
+    <div class="eyebrow">Product — Web Portal</div>
+    <h2 style="margin-bottom:6px;">Facility &amp; Recruiter <span class="highlight">Command Center</span></h2>
+    <p style="margin-bottom:6px; max-width:600px;">Two purpose-built portals — one for facilities &amp; recruiters, one for professionals — covering every step of the placement lifecycle.</p>
+    <p style="font-size:12px; color:rgba(255,255,255,0.35); margin-bottom:24px; font-style:italic;">Click any screen to open full slideshow ↓</p>
+
+    <!-- FACILITY PORTAL -->
+    <div style="margin-bottom:20px;">
+      <div style="display:flex; align-items:center; gap:16px; margin-bottom:12px; flex-wrap:wrap;">
+        <span style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--teal);">🏥 Facility Portal</span>
+        <span style="font-size:11px; color:rgba(255,255,255,0.3);">Profile &nbsp;·&nbsp; Candidates &nbsp;·&nbsp; My Jobs &nbsp;·&nbsp; Applications &nbsp;·&nbsp; Messaging &nbsp;·&nbsp; Timesheets</span>
+      </div>
+      <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px;">
+        <div class="web-thumb" onclick="openWebLightbox(0)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/facility_profile.png" alt="Facility Profile" /></div>
+          <div class="web-thumb-label">Profile</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(1)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/facility_candidates.png" alt="Candidates" /></div>
+          <div class="web-thumb-label">Candidates</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(2)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/facility_jobs.png" alt="My Jobs" /></div>
+          <div class="web-thumb-label">My Jobs</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(3)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/facility_applications.png" alt="Applications" /></div>
+          <div class="web-thumb-label">Applications</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(4)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/facility_messaging.png" alt="Messaging" /></div>
+          <div class="web-thumb-label">Messaging</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(5)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/facility_timesheets.png" alt="Timesheets" /></div>
+          <div class="web-thumb-label">Timesheets</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(6)">
+          <div class="browser-frame" style="border-color:rgba(0,180,166,0.45);"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/facility_timesheets_approved.png" alt="Timesheets Approved" /></div>
+          <div class="web-thumb-label" style="color:var(--teal);">Approved</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider divider-light" style="margin:16px 0;"></div>
+
+    <!-- PROFESSIONAL PORTAL -->
+    <div>
+      <div style="display:flex; align-items:center; gap:16px; margin-bottom:12px; flex-wrap:wrap;">
+        <span style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.55);">👤 Professional Portal</span>
+        <span style="font-size:11px; color:rgba(255,255,255,0.3);">Profile &nbsp;·&nbsp; My Network &nbsp;·&nbsp; Jobs &nbsp;·&nbsp; Timesheets &nbsp;·&nbsp; Messaging &nbsp;·&nbsp; Me</span>
+      </div>
+      <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px;">
+        <div class="web-thumb" onclick="openWebLightbox(7)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/profile.png" alt="Profile" /></div>
+          <div class="web-thumb-label">Profile</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(8)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/network.png" alt="My Network" /></div>
+          <div class="web-thumb-label">My Network</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(9)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/network_grow.png" alt="Grow Network" /></div>
+          <div class="web-thumb-label">Network — Grow</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(10)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/jobs.png" alt="Jobs" /></div>
+          <div class="web-thumb-label">Jobs</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(11)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/timesheets.png" alt="Timesheets" /></div>
+          <div class="web-thumb-label">Timesheets</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(12)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/timesheets_month.png" alt="Timesheets Monthly" /></div>
+          <div class="web-thumb-label">T-Sheets Monthly</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(13)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/messaging.png" alt="Messaging" /></div>
+          <div class="web-thumb-label">Messaging</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(14)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/me1.png" alt="Me" /></div>
+          <div class="web-thumb-label">Me</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(15)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/me2.png" alt="Me Details" /></div>
+          <div class="web-thumb-label">Me — Details</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(16)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/me3.png" alt="Me Credentials" /></div>
+          <div class="web-thumb-label">Me — Credentials</div>
+        </div>
+        <div class="web-thumb" onclick="openWebLightbox(17)">
+          <div class="browser-frame"><div class="browser-bar"><div class="browser-dot" style="background:#FF5F57;"></div><div class="browser-dot" style="background:#FFBD2E;"></div><div class="browser-dot" style="background:#28CA41;"></div></div><img src="website/me4.png" alt="Me Licenses" /></div>
+          <div class="web-thumb-label">Me — Licenses</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">6 / 13</div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 7 — DATA INTELLIGENCE -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="slide slide-white" id="slide-6">
+  <div class="stripe"></div>
+  <div style="max-width:1100px; margin:0 auto; width:100%;">
+    <div class="eyebrow">Data Intelligence</div>
+    <h2 style="margin-bottom:8px;">AI-Powered <span class="highlight">Profile Engine</span></h2>
+    <p style="margin-bottom:48px; max-width:620px;">
+      Locumfy's resume parsing and data curation engine automatically extracts,
+      structures, and verifies candidate information from both private and
+      government sources — creating the richest healthcare professional
+      profiles in the industry.
+    </p>
+
+    <div class="two-col" style="gap:60px; align-items:start;">
+      <div>
+        <h3 style="margin-bottom:20px;">Auto-Extracted Profile Data</h3>
+        <div style="display:flex; flex-wrap:wrap; gap:0;">
+          <span class="pill">Awards</span><span class="pill">Certifications</span>
+          <span class="pill">Education</span><span class="pill">Employment History</span>
+          <span class="pill">Internships</span><span class="pill">Languages</span>
+          <span class="pill">Memberships</span><span class="pill">Presentations</span>
+          <span class="pill">Publications</span><span class="pill">References</span>
+          <span class="pill">Research</span><span class="pill">Residencies</span>
+          <span class="pill">Skills</span><span class="pill">Specialties</span>
+          <span class="pill">State Licenses</span><span class="pill">State Preferences</span>
+          <span class="pill">Volunteer Work</span><span class="pill">Titles</span>
+        </div>
+
+        <div class="divider" style="margin:28px 0;"></div>
+
+        <h3 style="margin-bottom:16px;">Government Data Integration</h3>
+        <ul class="check-list">
+          <li>NPI Database — automatic provider match &amp; verification</li>
+          <li>DEA Number extraction &amp; association</li>
+          <li>Medicare Number linkage</li>
+          <li>State license validation &amp; legal address verification</li>
+        </ul>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:24px;">
+          <div class="icon-circle"><span>🤖</span></div>
+          <h3 style="margin-bottom:10px;">Smart Auto-Anonymization</h3>
+          <p>Resumes are auto-formatted to the Jackson standard and anonymized for
+          third-party facility submission — eliminating hours of manual reformatting
+          per candidate per placement.</p>
+        </div>
+        <div class="card">
+          <div class="icon-circle"><span>🔗</span></div>
+          <h3 style="margin-bottom:10px;">AI-Powered Social Graph</h3>
+          <p>Machine-learned match scores project professional connections across
+          shared employers, schools, specialties, and geographic preferences —
+          bootstrapping a rich network from day one.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num" style="color:var(--muted);">7 / 13</div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 8 — MARKET OPPORTUNITY -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="slide slide-dark" id="slide-7">
+  <div class="bg-circle" style="width:600px;height:600px;background:var(--teal);top:-200px;right:-150px;"></div>
+
+  <div style="max-width:1100px; margin:0 auto; width:100%; position:relative; z-index:1;">
+    <div class="eyebrow">Market Opportunity</div>
+    <h2 style="margin-bottom:40px;">A <span class="highlight">$40B+</span> Healthcare Staffing Market</h2>
+
+    <div class="four-col" style="margin-bottom:56px;">
+      <div class="stat">
+        <div class="stat-num">$40B+</div>
+        <div class="stat-label">US Healthcare Staffing Market</div>
+        <a href="https://www.grandviewresearch.com/industry-analysis/us-healthcare-staffing-market" target="_blank" rel="noopener" style="display:inline-block;margin-top:10px;font-size:11px;color:rgba(255,255,255,0.35);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:1px;" title="Grand View Research — US Healthcare Staffing Market">Grand View Research ↗</a>
+      </div>
+      <div class="stat">
+        <div class="stat-num">1M+</div>
+        <div class="stat-label">Active Locum Tenens Providers</div>
+        <a href="https://www.staffcare.com/locum-tenens-resources/locum-tenens-survey/" target="_blank" rel="noopener" style="display:inline-block;margin-top:10px;font-size:11px;color:rgba(255,255,255,0.35);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:1px;" title="Staff Care — Locum Tenens Survey">Staff Care Survey ↗</a>
+      </div>
+      <div class="stat">
+        <div class="stat-num">6,000+</div>
+        <div class="stat-label">US Hospitals &amp; Health Systems</div>
+        <a href="https://www.aha.org/statistics/fast-facts-us-hospitals" target="_blank" rel="noopener" style="display:inline-block;margin-top:10px;font-size:11px;color:rgba(255,255,255,0.35);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:1px;" title="American Hospital Association — Fast Facts on US Hospitals">AHA Fast Facts ↗</a>
+      </div>
+      <div class="stat">
+        <div class="stat-num">4.3M</div>
+        <div class="stat-label">Registered Nurses in the US</div>
+        <a href="https://www.bls.gov/ooh/healthcare/registered-nurses.htm" target="_blank" rel="noopener" style="display:inline-block;margin-top:10px;font-size:11px;color:rgba(255,255,255,0.35);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:1px;" title="Bureau of Labor Statistics — Registered Nurses">BLS Occupational Outlook ↗</a>
+      </div>
+    </div>
+
+    <div class="two-col" style="gap:40px;">
+      <div>
+        <h3 style="color:var(--white); margin-bottom:16px;">Existing Jackson Advantage</h3>
+        <ul class="check-list" style="color:rgba(255,255,255,0.85);">
+          <li>Hundreds of thousands of resumes already in the system</li>
+          <li>Established brands: TherapyJobs, JacksonNursing, LocumTenens</li>
+          <li>Pre-existing relationships with facilities and recruiters</li>
+          <li>Proven technology for resume ingestion and parsing</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="color:var(--white); margin-bottom:16px;">Competitive Differentiation</h3>
+        <ul class="check-list" style="color:rgba(255,255,255,0.85);">
+          <li>Only platform combining social graph + jobs + timesheets</li>
+          <li>Government data auto-verification (NPI, DEA, Medicare)</li>
+          <li>Cross-discipline coverage: nursing, therapy, physicians</li>
+          <li>Built-in brand equity across multiple Jackson properties</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">8 / 13</div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 9 — TRACTION & UNFAIR ADVANTAGE -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="slide slide-light" id="slide-8">
+  <div class="stripe"></div>
+  <div style="max-width:1100px; margin:0 auto; width:100%;">
+    <div class="eyebrow">Traction &amp; Unfair Advantage</div>
+    <h2 style="margin-bottom:8px;">Already <span class="highlight">Pre-Loaded</span> at Launch</h2>
+    <p style="margin-bottom:48px; max-width:620px;">
+      Unlike most platforms that start cold, Locumfy launches with a seeded
+      network of hundreds of thousands of verified medical professionals,
+      powered by existing Jackson data infrastructure.
+    </p>
+
+    <div class="three-col" style="margin-bottom:48px;">
+      <div class="card">
+        <div class="stat-num" style="font-size:48px; margin-bottom:8px;">90K+</div>
+        <div class="stat-label" style="margin-bottom:16px;">Training Candidates</div>
+        <p style="font-size:13px;">Seed dataset for AI model training spanning therapy, nursing, and physician disciplines.</p>
+      </div>
+      <div class="card">
+        <div class="stat-num" style="font-size:48px; margin-bottom:8px;">45K</div>
+        <div class="stat-label" style="margin-bottom:16px;">Distinct Profiles</div>
+        <p style="font-size:13px;">Unique candidate profiles ready to be activated on platform launch.</p>
+      </div>
+      <div class="card">
+        <div class="stat-num" style="font-size:48px; margin-bottom:8px;">660K+</div>
+        <div class="stat-label" style="margin-bottom:16px;">Projected Links</div>
+        <p style="font-size:13px;">AI-projected professional connections from the initial training cohort alone.</p>
+      </div>
+    </div>
+
+    <div class="quote-block" style="max-width:700px;">
+      "Much of the technology has been researched and prototyped. This allows Locumfy to get up
+      and running much quicker than starting from the ideation stage."
+    </div>
+  </div>
+  <div class="slide-num" style="color:var(--muted);">9 / 13</div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 10 — BUSINESS MODEL -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="slide slide-teal" id="slide-9">
+  <div class="bg-circle" style="width:500px;height:500px;background:var(--white);bottom:-150px;right:-100px;"></div>
+
+  <div style="max-width:1100px; margin:0 auto; width:100%; position:relative; z-index:1;">
+    <div class="eyebrow">Business Model</div>
+    <h2 style="margin-bottom:40px;">Multiple <strong>Revenue Streams</strong></h2>
+
+    <div class="four-col">
+      <div class="card-dark">
+        <div style="font-size:28px; margin-bottom:12px;">🏢</div>
+        <h4 style="color:var(--white); margin-bottom:8px;">Facility SaaS</h4>
+        <p style="font-size:13px;">Monthly subscriptions for hospitals and staffing agencies to access candidate search, pipeline tools, and anonymous resume exports.</p>
+      </div>
+      <div class="card-dark">
+        <div style="font-size:28px; margin-bottom:12px;">📢</div>
+        <h4 style="color:var(--white); margin-bottom:8px;">Job Posting &amp; Ads</h4>
+        <p style="font-size:13px;">Premium job listings, sponsored placements, and targeted advertising to healthcare professionals by specialty and location.</p>
+      </div>
+      <div class="card-dark">
+        <div style="font-size:28px; margin-bottom:12px;">⭐</div>
+        <h4 style="color:var(--white); margin-bottom:8px;">Pro Memberships</h4>
+        <p style="font-size:13px;">Premium tiers for professionals — enhanced profile visibility, credential badges, priority recruiter contact, and analytics.</p>
+      </div>
+      <div class="card-dark">
+        <div style="font-size:28px; margin-bottom:12px;">📊</div>
+        <h4 style="color:var(--white); margin-bottom:8px;">Data &amp; Insights</h4>
+        <p style="font-size:13px;">Aggregated workforce intelligence reports and market data for healthcare systems, insurers, and government entities.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">10 / 13</div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 11 — ROADMAP -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="slide slide-white" id="slide-10">
+  <div class="stripe"></div>
+  <div style="max-width:1000px; margin:0 auto; width:100%;">
+    <div class="eyebrow">Roadmap</div>
+    <h2 style="margin-bottom:8px;">From <span class="highlight">Prototype to Platform</span></h2>
+    <p style="margin-bottom:56px; max-width:580px;">
+      Research and prototyping are complete. Investment accelerates through
+      a phased go-to-market built on Jackson's existing infrastructure.
+    </p>
+
+    <div class="timeline" style="margin-bottom:56px;">
+      <div class="tl-item">
+        <div class="tl-dot">Q3</div>
+        <h4>Foundation</h4>
+        <p style="font-size:12px;">Data migration from Jackson properties. Profile seeding &amp; NPI integration. Soft launch to internal users.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">Q4</div>
+        <h4>Activation</h4>
+        <p style="font-size:12px;">Opt-in email campaigns to existing candidates. Mobile app launch. Facility portal beta.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">Q1</div>
+        <h4>Growth</h4>
+        <p style="font-size:12px;">Paid acquisition. Cross-brand banner ads. Facility SaaS subscription launch. Timesheet billing go-live.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">Q2</div>
+        <h4>Scale</h4>
+        <p style="font-size:12px;">Data intelligence product launch. Third-party agency integrations. Series B preparation.</p>
+      </div>
+    </div>
+
+    <div class="three-col">
+      <div class="card-teal">
+        <h4 style="margin-bottom:8px;">🚀 Already Done</h4>
+        <p style="font-size:13px;">Resume parsing engine, NPI integration, AI link-scoring model, mobile app prototype, web portal prototype.</p>
+      </div>
+      <div class="card-teal">
+        <h4 style="margin-bottom:8px;">🔧 In Progress</h4>
+        <p style="font-size:13px;">Data curation pipeline hardening, anonymization automation, timesheet billing workflows, facility onboarding flow.</p>
+      </div>
+      <div class="card-teal">
+        <h4 style="margin-bottom:8px;">📅 Planned</h4>
+        <p style="font-size:13px;">AI feed personalization, cross-discipline job recommendations, credential alert system, CME tracking.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num" style="color:var(--muted);">11 / 13</div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 12 — THE ASK -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="slide slide-dark" id="slide-11">
+  <div class="bg-circle" style="width:700px;height:700px;background:var(--teal);bottom:-300px;left:-200px;"></div>
+
+  <div style="max-width:1100px; margin:0 auto; width:100%; position:relative; z-index:1;">
+    <div class="eyebrow">The Ask</div>
+    <h2 style="margin-bottom:8px;">Seed Round · <span class="highlight">2 Engineers · 6 Months</span></h2>
+    <p style="color:rgba(255,255,255,0.6); font-size:15px; margin-bottom:36px; max-width:640px;">
+      The prototype is built. We need two additional full-stack engineers for a focused
+      6-month sprint to harden the platform, complete data pipelines, and launch to the
+      first cohort of facilities and professionals.
+    </p>
+
+    <!-- 6-month timeline bar -->
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:36px;">
+      <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px 20px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--teal); margin-bottom:8px;">Months 1 – 2</div>
+        <div style="font-weight:700; color:var(--white); margin-bottom:6px;">Foundation</div>
+        <div style="font-size:13px; color:rgba(255,255,255,0.55);">Data migration, NPI pipeline hardening, profile seeding, auth &amp; onboarding flows</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px 20px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--teal); margin-bottom:8px;">Months 3 – 4</div>
+        <div style="font-weight:700; color:var(--white); margin-bottom:6px;">Core Features</div>
+        <div style="font-size:13px; color:rgba(255,255,255,0.55);">Job matching, timesheet billing, facility portal, auto-anonymized resume export</div>
+      </div>
+      <div style="background:rgba(0,180,166,0.12); border:1px solid rgba(0,180,166,0.3); border-radius:12px; padding:16px 20px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--teal); margin-bottom:8px;">Months 5 – 6</div>
+        <div style="font-weight:700; color:var(--white); margin-bottom:6px;">Launch &amp; Activate</div>
+        <div style="font-size:13px; color:rgba(255,255,255,0.55);">Opt-in campaign to existing candidates, facility beta onboarding, go-live</div>
+      </div>
+    </div>
+
+    <div class="two-col" style="align-items:start;">
+      <div>
+        <h3 style="color:var(--white); margin-bottom:24px;">Use of Funds</h3>
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="width:8px; height:8px; border-radius:50%; background:var(--teal); flex-shrink:0;"></div>
+            <div>
+              <div style="font-weight:700; color:var(--white); font-size:15px;">Engineering &amp; Product — 40%</div>
+              <div style="font-size:13px; color:rgba(255,255,255,0.6);">2 additional full-stack engineers × 6 months, mobile &amp; DevOps</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="width:8px; height:8px; border-radius:50%; background:var(--accent); flex-shrink:0;"></div>
+            <div>
+              <div style="font-weight:700; color:var(--white); font-size:15px;">Data &amp; AI — 25%</div>
+              <div style="font-size:13px; color:rgba(255,255,255,0.6);">Data pipelines, model training, NPI automation, anonymization</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="width:8px; height:8px; border-radius:50%; background:#7FDED8; flex-shrink:0;"></div>
+            <div>
+              <div style="font-weight:700; color:var(--white); font-size:15px;">Sales &amp; Marketing — 20%</div>
+              <div style="font-size:13px; color:rgba(255,255,255,0.6);">Facility acquisition, brand campaigns, user opt-in activation</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="width:8px; height:8px; border-radius:50%; background:#FFB347; flex-shrink:0;"></div>
+            <div>
+              <div style="font-weight:700; color:var(--white); font-size:15px;">Operations &amp; Legal — 15%</div>
+              <div style="font-size:13px; color:rgba(255,255,255,0.6);">HIPAA compliance, data governance, customer success</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="color:var(--white); margin-bottom:24px;">What We're Building Toward</h3>
+        <ul class="check-list">
+          <li>Production launch by end of Month 6</li>
+          <li>100,000 activated professional profiles in Year 1</li>
+          <li>500+ facility subscribers in Year 1</li>
+          <li>$3M ARR target by end of Year 2</li>
+          <li>Cross-discipline expansion: allied health, dental, behavioral</li>
+        </ul>
+
+        <div class="divider divider-light" style="margin:28px 0;"></div>
+
+        <p style="font-size:13px; color:rgba(255,255,255,0.5);">
+          Locumfy augments — not replaces — the existing Jackson portfolio strategy.
+          Each Jackson brand continues to own its vertical while Locumfy provides
+          the unified engagement and talent layer above it.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-num">12 / 13</div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 13 — CLOSE -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="slide slide-teal" id="slide-12">
+  <div class="bg-circle" style="width:700px;height:700px;background:var(--white);top:-250px;right:-250px;"></div>
+  <div class="bg-circle" style="width:400px;height:400px;background:var(--navy);bottom:-150px;left:-100px;"></div>
+
+  <div style="max-width:800px; margin:0 auto; text-align:center; position:relative; z-index:1;">
+    <div class="eyebrow" style="color:rgba(255,255,255,0.7);">Let's Build Together</div>
+    <h1 style="margin-bottom:24px;">
+      The Professional Network<br/>Healthcare Deserves.
+    </h1>
+    <p style="font-size:clamp(16px,2vw,20px); margin-bottom:48px; color:rgba(255,255,255,0.85); max-width:600px; margin-left:auto; margin-right:auto;">
+      Locumfy is the convergence of an existing talent database, proven
+      AI technology, and a clear market need — delivering the first
+      truly unified platform for medical professionals and the
+      facilities that need them.
+    </p>
+
+    <div class="divider divider-light" style="max-width:400px; margin:0 auto 32px;"></div>
+
+    <div style="display:flex; gap:40px; justify-content:center; flex-wrap:wrap;">
+      <div class="stat">
+        <div class="stat-num" style="font-size:36px;">660K+</div>
+        <div class="stat-label">Projected Connections at Launch</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="font-size:36px;">$40B+</div>
+        <div class="stat-label">Addressable Market</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="font-size:36px;">Day 1</div>
+        <div class="stat-label">Network — Already Seeded</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-num">13 / 13</div>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- LIGHTBOX -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="lightbox-overlay" role="dialog" aria-modal="true" aria-label="Mobile screenshot slideshow">
+  <button id="lightbox-close" onclick="closeLightbox()" aria-label="Close">✕</button>
+  <div id="lightbox-stage">
+    <button class="lb-arrow" id="lb-prev" onclick="lbStep(-1)" aria-label="Previous">&#8592;</button>
+    <div id="lightbox-img-wrap">
+      <img id="lightbox-img" src="" alt="" />
+    </div>
+    <button class="lb-arrow" id="lb-next" onclick="lbStep(1)" aria-label="Next">&#8594;</button>
+  </div>
+  <div id="lightbox-caption"></div>
+  <div id="lightbox-counter"></div>
+  <div id="lightbox-thumbnails"></div>
+</div>
+
+<script>
+  /* ── Slide nav ── */
+  const slides = document.querySelectorAll('.slide');
+  const dots   = document.querySelectorAll('.dot');
+
+  function scrollToSlide(i) {
+    slides[i].scrollIntoView({ behavior: 'smooth' });
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = Array.from(slides).indexOf(entry.target);
+        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      }
+    });
+  }, { threshold: 0.5 });
+
+  slides.forEach(s => observer.observe(s));
+
+  /* ── Lightbox image sets ── */
+  const lbImages = [
+    { src: 'mobile/login.png',         label: 'Login' },
+    { src: 'mobile/profile.png',        label: 'Profile' },
+    { src: 'mobile/me1.png',            label: 'My Profile' },
+    { src: 'mobile/me2.png',            label: 'My Profile — Activity' },
+    { src: 'mobile/me3.png',            label: 'My Profile — Credentials' },
+    { src: 'mobile/me4.png',            label: 'My Profile — Licenses' },
+    { src: 'mobile/jobs.png',           label: 'Jobs' },
+    { src: 'mobile/network.png',        label: 'Network' },
+    { src: 'mobile/network_grow.png',   label: 'Grow Your Network' },
+    { src: 'mobile/messaging1.png',     label: 'Messaging' },
+    { src: 'mobile/messaging2.png',     label: 'Messaging — Thread' },
+    { src: 'mobile/timesheets1.png',    label: 'Timesheets' },
+    { src: 'mobile/timesheets2.png',    label: 'Timesheets — Detail' },
+  ];
+
+  const webLbImages = [
+    // Facility Portal — Profile | Candidates | My Jobs | Applications | Messaging | Timesheets
+    { src: 'website/facility_profile.png',             label: 'Facility — Profile' },
+    { src: 'website/facility_candidates.png',          label: 'Facility — Candidates' },
+    { src: 'website/facility_jobs.png',                label: 'Facility — My Jobs' },
+    { src: 'website/facility_applications.png',        label: 'Facility — Applications' },
+    { src: 'website/facility_messaging.png',           label: 'Facility — Messaging' },
+    { src: 'website/facility_timesheets.png',          label: 'Facility — Timesheets' },
+    { src: 'website/facility_timesheets_approved.png', label: 'Facility — Timesheets (Approved)' },
+    // Professional Portal — Profile | My Network | Jobs | Timesheets | Messaging | Me
+    { src: 'website/profile.png',          label: 'Professional — Profile' },
+    { src: 'website/network.png',          label: 'Professional — My Network' },
+    { src: 'website/network_grow.png',     label: 'Professional — Network (Grow)' },
+    { src: 'website/jobs.png',             label: 'Professional — Jobs' },
+    { src: 'website/timesheets.png',       label: 'Professional — Timesheets' },
+    { src: 'website/timesheets_month.png', label: 'Professional — Timesheets (Monthly)' },
+    { src: 'website/messaging.png',        label: 'Professional — Messaging' },
+    { src: 'website/me1.png',              label: 'Professional — Me' },
+    { src: 'website/me2.png',              label: 'Professional — Me (Details)' },
+    { src: 'website/me3.png',              label: 'Professional — Me (Credentials)' },
+    { src: 'website/me4.png',              label: 'Professional — Me (Licenses)' },
+  ];
+
+  let lbCurrent = 0;
+  let lbActiveImages = lbImages;
+
+  function buildThumbnails() {
+    const wrap = document.getElementById('lightbox-thumbnails');
+    wrap.innerHTML = '';
+    lbActiveImages.forEach((img, i) => {
+      const div = document.createElement('div');
+      div.className = 'lb-thumb' + (i === lbCurrent ? ' active' : '');
+      div.setAttribute('title', img.label);
+      div.onclick = () => lbGoto(i);
+      const im = document.createElement('img');
+      im.src = img.src;
+      im.alt = img.label;
+      div.appendChild(im);
+      wrap.appendChild(div);
+    });
+  }
+
+  function lbRender(fade) {
+    const el = document.getElementById('lightbox-img');
+    const doRender = () => {
+      el.src = lbActiveImages[lbCurrent].src;
+      el.alt = lbActiveImages[lbCurrent].label;
+      el.classList.remove('fading');
+      document.getElementById('lightbox-caption').textContent = lbActiveImages[lbCurrent].label;
+      document.getElementById('lightbox-counter').textContent = (lbCurrent + 1) + ' / ' + lbActiveImages.length;
+      document.querySelectorAll('.lb-thumb').forEach((t, i) =>
+        t.classList.toggle('active', i === lbCurrent)
+      );
+      const thumbs = document.querySelectorAll('.lb-thumb');
+      if (thumbs[lbCurrent]) thumbs[lbCurrent].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    };
+    if (fade) {
+      el.classList.add('fading');
+      setTimeout(doRender, 180);
+    } else {
+      doRender();
+    }
+  }
+
+  function lbGoto(i) {
+    lbCurrent = i;
+    lbRender(true);
+  }
+
+  function lbStep(dir) {
+    lbCurrent = (lbCurrent + dir + lbActiveImages.length) % lbActiveImages.length;
+    lbRender(true);
+  }
+
+  function openLightbox(startIndex) {
+    lbActiveImages = lbImages;
+    lbCurrent = startIndex;
+    document.getElementById('lightbox-overlay').classList.remove('web-mode');
+    buildThumbnails();
+    lbRender(false);
+    document.getElementById('lightbox-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function openWebLightbox(startIndex) {
+    lbActiveImages = webLbImages;
+    lbCurrent = startIndex;
+    document.getElementById('lightbox-overlay').classList.add('web-mode');
+    buildThumbnails();
+    lbRender(false);
+    document.getElementById('lightbox-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    const overlay = document.getElementById('lightbox-overlay');
+    if (!overlay.classList.contains('open')) return;
+    if (e.key === 'ArrowRight') lbStep(1);
+    else if (e.key === 'ArrowLeft') lbStep(-1);
+    else if (e.key === 'Escape') closeLightbox();
+  });
+
+  document.getElementById('lightbox-overlay').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('lightbox-overlay')) closeLightbox();
+  });
+</script>
+</body>
+</html>
