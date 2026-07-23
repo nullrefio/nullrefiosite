@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Service Layer &middot; Locumfy Docs</title>
+<meta name="description" content="Locumfy platform technical documentation — Service Layer.">
+<link rel="stylesheet" href="assets/css/docs.css">
+</head>
+<body data-page="services">
+<div class="layout">
+<nav class="side">
+  <a class="brand" href="index.html">
+    <span class="logo">L</span>
+    <span class="name">Locumfy<small>Technical Documentation</small></span>
+  </a>
+  <div class="group">Getting Started</div>
+  <ul>
+    <li><a href="index.html" data-nav="index" data-current="false">Overview</a></li>
+  </ul>
+  <div class="group">Architecture</div>
+  <ul>
+    <li><a href="architecture.html" data-nav="architecture" data-current="false">System Architecture</a></li>
+    <li><a href="data-layer.html" data-nav="data" data-current="false">Data Layer</a></li>
+    <li><a href="rest-api.html" data-nav="api" data-current="false">REST API</a></li>
+    <li><a href="service-layer.html" data-nav="services" data-current="true">Service Layer</a></li>
+    <li><a href="domain-workflows.html" data-nav="workflows" data-current="false">Domain Workflows</a></li>
+  </ul>
+  <div class="group">Subsystems</div>
+  <ul>
+    <li><a href="ai-resume.html" data-nav="ai" data-current="false">AI & Resume Engine</a></li>
+  </ul>
+  <div class="group">Client Apps</div>
+  <ul>
+    <li><a href="web-frontend.html" data-nav="web" data-current="false">Web Frontend</a></li>
+    <li><a href="mobile-app.html" data-nav="mobile" data-current="false">Mobile App</a></li>
+    <li><a href="admin-analytics.html" data-nav="admin" data-current="false">Admin & Analytics</a></li>
+  </ul>
+  <div class="group">Running It</div>
+  <ul>
+    <li><a href="operations-security.html" data-nav="ops" data-current="false">Operations</a></li>
+  </ul>
+</nav>
+<main>
+  <div class="topbar">
+    <button class="menu-toggle" aria-label="Toggle navigation">&#9776;</button>
+    <span class="crumb">Locumfy Docs &nbsp;/&nbsp; <b>Service Layer</b></span>
+    <span class="spacer"></span>
+    <span class="tag">Platform snapshot &middot; Jul 2026</span>
+  </div>
+  <article>
+    <h1>Service Layer</h1>
+    <p class="lede">The business logic lives in Nullref.Locumfy.DataProvider.Services.Core — a feature-sliced set of scoped services registered by convention, guarded by a recursive validation engine, and fed by request-scoped resolver caches.</p>
+
+<h2 id="slices">Feature slices</h2>
+<p>Services are organized under <code>Features/&lt;Feature&gt;/{Services,Models,Utilities}</code>.
+Large services are split into <code>partial</code> class files by concern.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Feature</th><th>Key service(s)</th><th>Responsibility</th></tr></thead>
+<tbody>
+<tr><td>Candidate</td><td><code>CandidateService</code> (partials: <code>.Candidate</code>, <code>.Jobs</code>, <code>.Network</code>, <code>.Timesheets</code>, <code>.Applications</code>, <code>.Documents</code>, <code>.Npi</code>, <code>.Resume</code>, <code>.AiSummary</code>, <code>.ProfilePdf</code>, <code>.W9</code>), <code>CandidateProfileService</code>, <code>CandidateSubscriptionService</code></td><td>The entire candidate surface: account, ~16 profile sub-resources, jobs, network, documents, AI summary, exports</td></tr>
+<tr><td>Employer</td><td><code>EmployerService</code> (partials: <code>.cs</code>, <code>.Jobs</code>, <code>.Applications</code>, <code>.Candidates</code>, <code>.Network</code>, <code>.Timesheets</code>, <code>.Agreement</code>)</td><td>Company/account, job posting, application workflow, candidate search &amp; standardized resume</td></tr>
+<tr><td>SecurityToken</td><td><code>TokenService</code></td><td>Issues/validates self-generated JWTs; role constants</td></tr>
+<tr><td>Login</td><td><code>LoginService</code></td><td>Credential check (candidate then employer) &rarr; token</td></tr>
+<tr><td>Messaging</td><td><code>MessagingService</code></td><td>Thread-based chat across candidate &amp; employer identities</td></tr>
+<tr><td>Timesheet</td><td><code>TimesheetService</code></td><td>Shared timesheet logic + HTML/PDF rendering</td></tr>
+<tr><td>AiGeneration</td><td><code>AiGenerationService</code></td><td>Pluggable LLM client (cloud or local/open-source)</td></tr>
+<tr><td>Feed / News / Document / StaticData</td><td><code>FeedService</code>, <code>NewsService</code>, <code>DocumentService</code>, <code>StaticDataService</code></td><td>Activity feed, news, S3-backed documents, lookup data</td></tr>
+</tbody></table></div>
+
+<h2 id="di">Dependency injection &amp; base classes</h2>
+<p>Services are marked <code>[ScopedLifetime]</code> and auto-registered by a Scrutor assembly scan
+(<code>InstallServicesAllAssemblies</code>). To keep constructors small, an
+<code>IServiceConfiguration</code> aggregate is injected into every service, bundling the
+<code>DataContext</code>, logging, the <code>IUserContextService</code>, and the three resolvers.</p>
+<pre><code><span class="tok-c">// ServiceBase : DatabaseService : LoggerContainer</span>
+<span class="tok-k">public class</span> <span class="tok-t">CandidateService</span> : <span class="tok-t">ServiceBase</span>, <span class="tok-t">ICandidateService</span>
+{
+    <span class="tok-c">// _context, _userContextService, scoped logging inherited from ServiceBase</span>
+}</code></pre>
+
+<h2 id="validation">The validation engine</h2>
+<p>UI models returned by / accepted by the API implement <code>IModel</code> and derive from
+<code>AbstractValidatableModel</code>. Services call <code>model.Validate()</code> explicitly. The engine
+(<code>Infrastructure/ValidatableObjectExtensions.Validate&lt;T&gt;()</code>) does more than
+<code>Validator.TryValidateObject</code>:</p>
+<ul>
+<li>Recursively walks object graphs and <code>List&lt;T&gt;</code> children.</li>
+<li>Auto-trims <code>[AutoTrim]</code> strings and HTML-sanitizes string input.</li>
+<li>Adds rules the attributes miss: non-nullable <code>[Required]</code> <code>DateTime</code>/<code>LocalDate</code> must not be default; <code>Guid</code> must not be <code>Guid.Empty</code>.</li>
+<li>On failure throws <code>RequestValidationException</code> with a per-field error dictionary &rarr; HTTP 422.</li>
+</ul>
+<div class="callout note"><span class="h">Model rules</span>
+Value-type non-nullable properties on UI models are <code>[Required]</code>; sortable fields use
+<code>[Sortable]</code>; date ranges use <code>[LocalDateTimeRange]</code>. This keeps validation and
+Swagger metadata declarative.</div>
+
+<h2 id="resolvers">Resolvers (request-scoped caches)</h2>
+<p>To avoid N+1 queries when mapping many rows, <code>ResolverBase&lt;TKey,TResult&gt;</code> provides
+thread-safe, request-scoped <code>ConcurrentDictionary</code> caches that batch-load and memoize common
+lookups: <code>CompanyResolver</code>, <code>JobApplicationResolver</code> (loads in chunks of 50,
+<code>AsNoTracking</code>), <code>StateResolver</code>, <code>ProfessionResolver</code>.</p>
+
+<h2 id="mapping">Entity &rarr; UI-model mapping</h2>
+<p><code>CandidateProfileService.BuildProfile(candidateId, includePrivate)</code> is the canonical mapper:
+it loads the candidate plus ~18 related collections and projects them into <code>Profile*ItemModel</code>
+types, resolves state/profession/title display names, derives the active job from the single
+<code>Facility_Accepted</code> application, and computes a <code>PercentComplete</code> score.
+<code>EmployerService.Candidates.GetCandidate</code> produces the employer-facing view of the same
+profile data.</p>
+
+<div class="pager"><a href="rest-api.html" class="prev"><span class="dir">&larr; Previous</span><span class="ttl">REST API</span></a><a href="domain-workflows.html" class="next"><span class="dir">Next &rarr;</span><span class="ttl">Domain Workflows</span></a></div>
+    <p class="doc-foot">Locumfy platform technical documentation &middot; generated from source analysis &middot;
+    see <a href="README.md">README</a> for how to keep this current.</p>
+  </article>
+</main>
+</div>
+<script>
+  // Minimal, dependency-free: mobile nav toggle + defensive current-page highlight.
+  document.querySelector('.menu-toggle')?.addEventListener('click', function () {
+    document.body.classList.toggle('nav-open');
+  });
+  var pid = document.body.getAttribute('data-page');
+  document.querySelectorAll('nav.side a[data-nav]').forEach(function (a) {
+    a.setAttribute('data-current', a.getAttribute('data-nav') === pid ? 'true' : 'false');
+  });
+</script>
+</body>
+</html>

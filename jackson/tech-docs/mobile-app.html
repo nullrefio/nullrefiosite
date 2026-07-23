@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobile App &middot; Locumfy Docs</title>
+<meta name="description" content="Locumfy platform technical documentation — Mobile App.">
+<link rel="stylesheet" href="assets/css/docs.css">
+</head>
+<body data-page="mobile">
+<div class="layout">
+<nav class="side">
+  <a class="brand" href="index.html">
+    <span class="logo">L</span>
+    <span class="name">Locumfy<small>Technical Documentation</small></span>
+  </a>
+  <div class="group">Getting Started</div>
+  <ul>
+    <li><a href="index.html" data-nav="index" data-current="false">Overview</a></li>
+  </ul>
+  <div class="group">Architecture</div>
+  <ul>
+    <li><a href="architecture.html" data-nav="architecture" data-current="false">System Architecture</a></li>
+    <li><a href="data-layer.html" data-nav="data" data-current="false">Data Layer</a></li>
+    <li><a href="rest-api.html" data-nav="api" data-current="false">REST API</a></li>
+    <li><a href="service-layer.html" data-nav="services" data-current="false">Service Layer</a></li>
+    <li><a href="domain-workflows.html" data-nav="workflows" data-current="false">Domain Workflows</a></li>
+  </ul>
+  <div class="group">Subsystems</div>
+  <ul>
+    <li><a href="ai-resume.html" data-nav="ai" data-current="false">AI & Resume Engine</a></li>
+  </ul>
+  <div class="group">Client Apps</div>
+  <ul>
+    <li><a href="web-frontend.html" data-nav="web" data-current="false">Web Frontend</a></li>
+    <li><a href="mobile-app.html" data-nav="mobile" data-current="true">Mobile App</a></li>
+    <li><a href="admin-analytics.html" data-nav="admin" data-current="false">Admin & Analytics</a></li>
+  </ul>
+  <div class="group">Running It</div>
+  <ul>
+    <li><a href="operations-security.html" data-nav="ops" data-current="false">Operations</a></li>
+  </ul>
+</nav>
+<main>
+  <div class="topbar">
+    <button class="menu-toggle" aria-label="Toggle navigation">&#9776;</button>
+    <span class="crumb">Locumfy Docs &nbsp;/&nbsp; <b>Mobile App</b></span>
+    <span class="spacer"></span>
+    <span class="tag">Platform snapshot &middot; Jul 2026</span>
+  </div>
+  <article>
+    <h1>Mobile App</h1>
+    <p class="lede">Nullref.Locumfy.Mobile — a Flutter/Dart companion app that mirrors the website&rsquo;s candidate experience against the same REST contract.</p>
+
+<h2 id="stack">Stack &amp; structure</h2>
+<div class="kv">
+<dt>Platform</dt><dd>Flutter (Material), Dart <code>^3.11.5</code>; android/ios/windows targets present</dd>
+<dt>Networking</dt><dd><code>http ^1.2.0</code></dd>
+<dt>Local storage</dt><dd><code>shared_preferences</code> (dark-mode only), <code>path_provider</code> (downloads), <code>file_picker</code> (uploads)</dd>
+<dt>State</dt><dd>Plain <code>StatefulWidget</code> + <code>setState</code>; theme via a <code>ChangeNotifier</code> singleton (<code>ThemeController</code>). No provider/bloc/riverpod.</dd>
+<dt>API target</dt><dd><code>http://10.0.2.2:5236/api</code> on Android emulator, <code>localhost:5236</code> elsewhere</dd>
+</div>
+<p>Under <code>lib/</code>: <code>main.dart</code>, <code>theme.dart</code>,
+<code>models/api_models.dart</code> (~52&nbsp;KB of DTOs with <code>fromJson</code>),
+<code>services/api_service.dart</code> (~42&nbsp;KB REST client), <code>screens/</code>,
+<code>widgets/</code> (incl. a 21&nbsp;KB <code>section_editor</code>), <code>utils/</code>.</p>
+
+<h2 id="nav">Navigation &amp; API layer</h2>
+<p>Imperative <code>Navigator</code>: <code>SplashScreen</code> &rarr; <code>LoginScreen</code> &rarr;
+<code>MainScreen</code>, a <code>BottomNavigationBar</code> over an <code>IndexedStack</code> of six tabs:
+<strong>Profile (feed)</strong>, <strong>My Network</strong>, <strong>Jobs</strong>,
+<strong>Timesheets</strong>, <strong>Messaging</strong>, <strong>Me</strong>.</p>
+<p><code>ApiService.instance</code> is a singleton with <code>_get/_post/_put/_delete</code> helpers, a 5&nbsp;s
+timeout, and <code>Bearer</code> auth. It covers the full candidate <em>and</em> facility surface (jobs,
+applications, profile section CRUD, AI summary, messaging, network, feed, timesheets, documents, lookups).</p>
+<div class="callout note"><span class="h">Session handling</span>
+The mobile app holds the token in memory for the session, so the splash screen routes to login on each
+launch. (The website, by contrast, restores its session from <code>localStorage</code>.)</div>
+
+<h2 id="screens">Screens</h2>
+<div class="shots phones">
+  <figure><img src="assets/img/m-login.png" alt="Mobile login screen"><figcaption>Login</figcaption></figure>
+  <figure><img src="assets/img/m-feed.png" alt="Mobile profile feed"><figcaption>Profile feed</figcaption></figure>
+  <figure><img src="assets/img/m-jobs.png" alt="Mobile jobs screen"><figcaption>Jobs</figcaption></figure>
+  <figure><img src="assets/img/m-network-grow.png" alt="Mobile network Grow tab"><figcaption>Network &rsaquo; Grow</figcaption></figure>
+  <figure><img src="assets/img/m-messaging.png" alt="Mobile messaging screen"><figcaption>Messaging</figcaption></figure>
+  <figure><img src="assets/img/m-timesheets.png" alt="Mobile timesheets screen"><figcaption>Timesheets</figcaption></figure>
+  <figure><img src="assets/img/m-me.png" alt="Mobile Me profile screen"><figcaption>Me (editable profile)</figcaption></figure>
+</div>
+
+<div class="table-wrap"><table>
+<thead><tr><th>Screen</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td><code>network_screen.dart</code></td><td>3-tab <code>TabController</code> (Connections / Invitations / Grow); NPI + Credentialed badges</td></tr>
+<tr><td><code>timesheets_screen.dart</code> (~71&nbsp;KB)</td><td>The largest screen: weekly/monthly + 7-day editor</td></tr>
+<tr><td><code>profile_screen.dart</code> (~51&nbsp;KB)</td><td>&ldquo;Me&rdquo; editable profile with section editors</td></tr>
+<tr><td><code>messaging_screen.dart</code></td><td>Conversation list + thread chat</td></tr>
+<tr><td><code>documents_screen.dart</code></td><td>Document list / upload / download</td></tr>
+</tbody></table></div>
+
+<h2 id="parity">Parity with the website</h2>
+<p>Same endpoints, same camelCase JSON, same <code>Bearer</code> JWT. Both implement the 3-tab Network,
+the NPI/Premium/Credentialed badges, create-account-via-NPI, AI summaries, profile &amp; timesheet
+PDF/HTML downloads, and a persisted light/dark theme (web <code>ThemeContext</code> &harr; mobile
+<code>ThemeController</code>). Divergences: session persistence (web yes, mobile no) and navigation style
+(declarative router vs imperative <code>Navigator</code>).</p>
+
+<div class="pager"><a href="web-frontend.html" class="prev"><span class="dir">&larr; Previous</span><span class="ttl">Web Frontend</span></a><a href="admin-analytics.html" class="next"><span class="dir">Next &rarr;</span><span class="ttl">Admin & Analytics</span></a></div>
+    <p class="doc-foot">Locumfy platform technical documentation &middot; generated from source analysis &middot;
+    see <a href="README.md">README</a> for how to keep this current.</p>
+  </article>
+</main>
+</div>
+<script>
+  // Minimal, dependency-free: mobile nav toggle + defensive current-page highlight.
+  document.querySelector('.menu-toggle')?.addEventListener('click', function () {
+    document.body.classList.toggle('nav-open');
+  });
+  var pid = document.body.getAttribute('data-page');
+  document.querySelectorAll('nav.side a[data-nav]').forEach(function (a) {
+    a.setAttribute('data-current', a.getAttribute('data-nav') === pid ? 'true' : 'false');
+  });
+</script>
+</body>
+</html>

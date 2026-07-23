@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin &amp; Analytics &middot; Locumfy Docs</title>
+<meta name="description" content="Locumfy platform technical documentation — Admin &amp; Analytics.">
+<link rel="stylesheet" href="assets/css/docs.css">
+</head>
+<body data-page="admin">
+<div class="layout">
+<nav class="side">
+  <a class="brand" href="index.html">
+    <span class="logo">L</span>
+    <span class="name">Locumfy<small>Technical Documentation</small></span>
+  </a>
+  <div class="group">Getting Started</div>
+  <ul>
+    <li><a href="index.html" data-nav="index" data-current="false">Overview</a></li>
+  </ul>
+  <div class="group">Architecture</div>
+  <ul>
+    <li><a href="architecture.html" data-nav="architecture" data-current="false">System Architecture</a></li>
+    <li><a href="data-layer.html" data-nav="data" data-current="false">Data Layer</a></li>
+    <li><a href="rest-api.html" data-nav="api" data-current="false">REST API</a></li>
+    <li><a href="service-layer.html" data-nav="services" data-current="false">Service Layer</a></li>
+    <li><a href="domain-workflows.html" data-nav="workflows" data-current="false">Domain Workflows</a></li>
+  </ul>
+  <div class="group">Subsystems</div>
+  <ul>
+    <li><a href="ai-resume.html" data-nav="ai" data-current="false">AI & Resume Engine</a></li>
+  </ul>
+  <div class="group">Client Apps</div>
+  <ul>
+    <li><a href="web-frontend.html" data-nav="web" data-current="false">Web Frontend</a></li>
+    <li><a href="mobile-app.html" data-nav="mobile" data-current="false">Mobile App</a></li>
+    <li><a href="admin-analytics.html" data-nav="admin" data-current="true">Admin & Analytics</a></li>
+  </ul>
+  <div class="group">Running It</div>
+  <ul>
+    <li><a href="operations-security.html" data-nav="ops" data-current="false">Operations</a></li>
+  </ul>
+</nav>
+<main>
+  <div class="topbar">
+    <button class="menu-toggle" aria-label="Toggle navigation">&#9776;</button>
+    <span class="crumb">Locumfy Docs &nbsp;/&nbsp; <b>Admin &amp; Analytics</b></span>
+    <span class="spacer"></span>
+    <span class="tag">Platform snapshot &middot; Jul 2026</span>
+  </div>
+  <article>
+    <h1>Admin &amp; Analytics</h1>
+    <p class="lede">An internal executive/investor metrics dashboard (Nullref.Locumfy.Adminsite) over its own API (Nullref.Locumfy.AdminWebsiteApi + Services.AdminCore) that surfaces platform KPIs and growth, liquidity, revenue, and engagement analytics.</p>
+
+<h2 id="site">Admin site</h2>
+<div class="kv">
+<dt>Stack</dt><dd>React 18 + Vite 5 + react-router 6 (same toolchain as the website, leaner deps; dev port <code>:5183</code>)</dd>
+<dt>Charts</dt><dd>Hand-rolled SVG in <code>components/charts.jsx</code> (LineChart, BarChart, Funnel, Heatmap) &mdash; no charting library</dd>
+<dt>API target</dt><dd><code>VITE_ADMIN_API_URL</code> &rarr; <code>AdminWebsiteApi</code> (dev <code>:5336</code>)</dd>
+</div>
+<p>The dashboard presents platform analytics through a consistent, filter-driven UI. Every page fetches
+its metrics from the admin API and renders them with the hand-built SVG charts. A global filter bar
+(persisted to <code>localStorage</code>) drives date range, granularity, comparison mode, and segment
+filters across every view.</p>
+
+<h2 id="api">Admin API</h2>
+<p><code>AdminWebsiteApi</code> shares the same Startup/versioning/Swagger/exception scaffolding as the
+public API and the <strong>same shared <code>DataContext</code></strong>, but its services
+(<code>Services.AdminCore</code>) are heavy read-only analytics that compute windowed vs prior-period vs
+year-over-year comparisons directly against EF Core.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Controller</th><th>Route</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>ExecutiveController</code></td><td><code>executive/summary</code></td><td>KPI tiles, growth line, funnel, activity heatmap, revenue trend, needs-attention</td></tr>
+<tr><td><code>GrowthController</code></td><td><code>growth/summary</code></td><td>Registrations/activation, cohort retention, by profession/state, campaign conversion</td></tr>
+<tr><td><code>LiquidityController</code></td><td><code>liquidity/summary</code></td><td>Marketplace liquidity: application funnel, jobs posted vs filled, supply/demand, time-to-fill</td></tr>
+<tr><td><code>LookupController</code></td><td><code>lookup/{profession|state|candidate-title}</code></td><td>Filter-bar dropdown data</td></tr>
+</tbody></table></div>
+<p>All summary endpoints take a validated <code>DashboardFilterModel</code> (date range, granularity,
+comparison mode, segment filters) from the query string; <code>DashboardBucketing</code> handles
+time-bucketing.</p>
+
+<h2 id="pages">Dashboard pages</h2>
+<p>Eleven sidebar tabs: Executive, Growth, Liquidity, Engagement, Employer Activity, Candidate Supply,
+Work &amp; Timesheets (GMV), Revenue, Content &amp; Comms, Operational Health, Investor View. Each reads the
+global filter, calls its <code>…/summary</code> endpoint, and renders a KPI grid + charts.</p>
+
+<div class="shots">
+  <figure><img src="assets/img/candidate-pricing.png" alt="Candidate pricing"><figcaption>Candidate pricing (product model)</figcaption></figure>
+  <figure><img src="assets/img/employer-pricing.png" alt="Employer pricing"><figcaption>Employer pricing (product model)</figcaption></figure>
+</div>
+<p class="dgm-cap">Monetization/product context that the analytics dashboards track (from marketing).</p>
+
+<div class="pager"><a href="mobile-app.html" class="prev"><span class="dir">&larr; Previous</span><span class="ttl">Mobile App</span></a><a href="operations-security.html" class="next"><span class="dir">Next &rarr;</span><span class="ttl">Operations</span></a></div>
+    <p class="doc-foot">Locumfy platform technical documentation &middot; generated from source analysis &middot;
+    see <a href="README.md">README</a> for how to keep this current.</p>
+  </article>
+</main>
+</div>
+<script>
+  // Minimal, dependency-free: mobile nav toggle + defensive current-page highlight.
+  document.querySelector('.menu-toggle')?.addEventListener('click', function () {
+    document.body.classList.toggle('nav-open');
+  });
+  var pid = document.body.getAttribute('data-page');
+  document.querySelectorAll('nav.side a[data-nav]').forEach(function (a) {
+    a.setAttribute('data-current', a.getAttribute('data-nav') === pid ? 'true' : 'false');
+  });
+</script>
+</body>
+</html>
