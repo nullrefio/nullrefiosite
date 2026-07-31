@@ -7,36 +7,14 @@
 <meta name="description" content="A business overview of Locumfy: the professional network and staffing platform purpose-built for healthcare.">
 <!--
   ============================================================================
-  LOCUMFY — BUSINESS WALKTHROUGH
+  LOCUMFY - PLATFORM WALKTHROUGH
   ----------------------------------------------------------------------------
-  Audience : Business leaders and non-technical decision-makers in medical
-             recruiting. This is NOT the developer documentation — that lives
-             in  documentation/tech-docs/  (open its index.html). Keep this
-             document plain-language and concept-focused; send engineers to
-             tech-docs for architecture, APIs, and data model.
+  A plain-language overview of the Locumfy platform prepared for investors,
+  partners and business leaders in medical recruiting.
 
-  Format   : Single self-contained HTML page + an /assets/img folder of
-             screenshots copied from ../../marketing. No build step, no
-             framework, no external network calls. Open index.html in any
-             browser.
-
-  HOW TO UPDATE (see also the "About this document" section at the bottom and
-  the README.md in this folder):
-    - All styling lives in the <style> block below; brand colors are CSS
-      variables in :root (search for "--brand").
-    - Each major section is a <section id="..."> with a matching entry in the
-      top navigation (<nav class="topnav">). Add both when you add a section.
-    - Diagrams are hand-drawn inline <svg> — no image files, edit the shapes
-      directly. Each is wrapped in <figure class="diagram"> and labelled.
-    - Screenshots live in assets/img/. To refresh, re-copy from
-      ../../marketing and keep the same filenames.
-    - Search for  "MAINTAINER:"  throughout for spot-specific update notes.
-
-  Content sources (as of Jul 2026):
-    ../../CLAUDE.md ................ platform description, workflows, roadmap
-    ../../marketing/summary.txt .... concept, data curation, link stats
-    ../../marketing/todo.txt ....... roadmap / planned features
-    ../../marketing/CLAUDE.md ...... messaging pillars, audience & tone
+  Single self-contained HTML page plus an /assets/img folder of product
+  screenshots. No build step, no framework, no external network calls - open
+  index.html in any browser.
   ============================================================================
 -->
 <style>
@@ -45,7 +23,7 @@
     --teal:#0fb5a6; --teal-dark:#0a897d; --teal-050:#e6faf7;
     --ink:#15233b; --text:#33415c; --muted:#647089; --faint:#8a94a8;
     --line:#e5e9f0; --line-soft:#eef1f6;
-    --bg:#ffffff; --bg-soft:#f6f8fc; --bg-deep:#0f1c34;
+    --bg:#ffffff; --bg-soft:#f6f8fc; --bg-deep:#0f1c34; --hero-bg:#13315c;
     --amber:#b7791f; --amber-bg:#fdf6e7;
     --radius:14px; --radius-sm:10px;
     --shadow-sm:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.10);
@@ -67,24 +45,25 @@
   /* ---------- Top navigation ---------- */
   .topnav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);
     backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
-  .topnav .row{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:22px;
-    padding:12px 28px}
-  .logo{font-weight:800;font-size:22px;letter-spacing:-.02em;color:var(--brand);
-    display:flex;align-items:center;gap:9px}
-  .logo .plus{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:7px;
+  .topnav .row{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:16px;
+    padding:10px 28px}
+  .logo{font-weight:800;font-size:19px;letter-spacing:-.02em;color:var(--brand);
+    display:flex;align-items:center;gap:9px;flex-shrink:0}
+  .logo .plus{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:7px;
     background:var(--brand);color:#fff;font-size:17px;font-weight:700}
-  .logo small{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.02em;
-    text-transform:uppercase;padding-left:2px}
-  .navlinks{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
-  .navlinks a{color:var(--muted);font-size:14.5px;font-weight:600;padding:7px 11px;border-radius:8px}
+  .logo .logotext{display:flex;flex-direction:column;line-height:1.18}
+  .logo small{font-weight:600;color:var(--muted);font-size:10.5px;letter-spacing:.03em;
+    text-transform:uppercase}
+  .navlinks{margin-left:auto;min-width:0;display:flex;gap:1px;flex-wrap:nowrap;
+    overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
+  .navlinks::-webkit-scrollbar{display:none}
+  .navlinks a{color:var(--muted);font-size:12.5px;font-weight:600;padding:6px 7px;
+    border-radius:8px;white-space:nowrap}
   .navlinks a:hover{color:var(--ink);background:var(--bg-soft);text-decoration:none}
-  @media(max-width:860px){.navlinks{display:none}}
+  @media(max-width:760px){.navlinks{display:none}}
 
   /* ---------- Hero ---------- */
-  .hero{position:relative;overflow:hidden;color:#fff;
-    background:radial-gradient(1200px 500px at 15% -10%,#2b7bff 0%,transparent 55%),
-               radial-gradient(900px 500px at 100% 0%,#0fb5a6 0%,transparent 45%),
-               linear-gradient(160deg,#123a86 0%,#0f1c34 100%)}
+  .hero{position:relative;overflow:hidden;color:#fff;background:var(--hero-bg)}
   .hero .wrap{padding:78px 28px 84px;position:relative;z-index:2}
   .kicker{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.14em;
     text-transform:uppercase;color:#bcd4ff;background:rgba(255,255,255,.08);
@@ -175,9 +154,9 @@
   .callout{border-radius:12px;padding:18px 20px;margin:26px 0;font-size:15.5px}
   .callout.quote{background:var(--brand-050);border-left:4px solid var(--brand);color:var(--ink)}
   .callout.note{background:var(--teal-050);border-left:4px solid var(--teal);color:#134b45}
-  .callout.maint{background:var(--amber-bg);border-left:4px solid var(--amber);color:#6b4c12;
+  .callout.figures{background:var(--amber-bg);border-left:4px solid var(--amber);color:#6b4c12;
     font-size:14px}
-  .callout.maint b{color:#5a3f0d}
+  .callout.figures b{color:#5a3f0d}
   .callout strong{color:inherit}
 
   /* ---------- Steps / timeline ---------- */
@@ -223,10 +202,9 @@
 <body>
 
 <!-- ======================= TOP NAV ======================= -->
-<!-- MAINTAINER: keep these anchors in sync with the <section id="..."> below. -->
 <nav class="topnav">
   <div class="row">
-    <span class="logo"><span class="plus">+</span>Locumfy <small>Walkthrough</small></span>
+    <span class="logo"><span class="logotext">Locumfy<small>Walkthrough</small></span></span>
     <span class="navlinks">
       <a href="#overview">Overview</a>
       <a href="#problem">The Problem</a>
@@ -244,7 +222,7 @@
 <!-- ======================= HERO ======================= -->
 <header class="hero" id="overview">
   <div class="wrap">
-    <span class="kicker">Platform Walkthrough · For Business Leaders</span>
+    <span class="kicker">Platform Walkthrough · For Investors &amp; Partners</span>
     <h1>The professional network built for healthcare.</h1>
     <p class="lede">Locumfy connects medical professionals with the facilities that need them —
       combining a LinkedIn-style network, a job marketplace, verified credentials, timesheets and
@@ -257,9 +235,6 @@
 </header>
 
 <!-- ======================= STAT BAND ======================= -->
-<!-- MAINTAINER: these are ILLUSTRATIVE figures drawn from the concept research
-     (marketing/summary.txt) and the seed-data strategy — NOT live production
-     metrics. Update the numbers and the qualifier note if real figures land. -->
 <div class="statband">
   <div class="grid">
     <div class="stat"><div class="n">~250<span>k</span></div><div class="l">Healthcare resumes available to seed the network at launch</div></div>
@@ -315,8 +290,6 @@
       use a mobile app; facilities and recruiters use a web portal. Behind both sits an engine that
       turns raw resumes and public records into rich, verified, searchable profiles.</p>
 
-    <!-- MAINTAINER: ecosystem diagram is hand-drawn SVG. If you add a major
-         participant (e.g. a payments partner), add a node and a connector here. -->
     <figure class="diagram">
       <svg viewBox="0 0 920 470" role="img" aria-label="Locumfy ecosystem diagram">
         <defs>
@@ -447,9 +420,6 @@
       single professional profile carries all the way through the workflow, and every step feeds the
       next.</p>
 
-    <!-- MAINTAINER: this is the headline "value story" diagram. If the product
-         adds a stage (e.g. shift scheduling before "Work"), insert a node and
-         shift the x-coordinates. Keep it readable — 7 nodes is about the max. -->
     <figure class="diagram">
       <svg viewBox="0 0 940 250" role="img" aria-label="Candidate journey from resume to payment">
         <defs>
@@ -554,8 +524,6 @@
       that reads a resume, structures it, verifies it against official records, and can re-format it
       on demand — the exact manual work recruiters do today, done automatically.</p>
 
-    <!-- MAINTAINER: pipeline diagram. The two outputs on the right (matching &
-         anonymized export) are the two "so what" payoffs — keep both visible. -->
     <figure class="diagram">
       <svg viewBox="0 0 940 320" role="img" aria-label="Resume data engine pipeline">
         <defs>
@@ -675,8 +643,6 @@
     <p class="section-lede">These are screens from the built prototype — the mobile app professionals
       carry and the web portal facilities work in every day.</p>
 
-    <!-- MAINTAINER: swap these <img src> for fresher captures as the UI evolves.
-         Keep the phone/browser wrappers; they give the shots a polished frame. -->
     <h3 class="sub">The professional's app</h3>
     <div class="phone-row">
       <figure class="shot"><div class="phone sm"><span class="scr"><img src="assets/img/m-jobs.png" alt="Jobs"></span></div><figcaption>Jobs</figcaption></figure>
@@ -721,8 +687,6 @@
       <div class="card"><div class="ico">$</div><h4>Revenue &amp; hours</h4>
         <p>Timesheet volume and revenue trends tie platform activity directly to the bottom line.</p></div>
     </div>
-    <!-- MAINTAINER: the admin dashboard figures in the screenshot are demo/seed
-         data. Note this if the deck or docs are shown to an external party. -->
   </div>
 </section>
 
@@ -735,10 +699,6 @@
       facilities pay for reach, search, and hiring tools. The full lifecycle — through timesheets and
       payments — opens revenue that stops at the job board for competitors.</p>
 
-    <!-- MAINTAINER: these two images are the pricing concepts from the investor
-         deck (marketing/other/*-pricing.png). They are ILLUSTRATIVE tiers, not
-         final published pricing — update the images and this note when pricing
-         is locked. -->
     <div class="pricegrid">
       <div class="pricecard">
         <div class="ph">For medical professionals</div>
@@ -771,30 +731,34 @@
       engine. The roadmap is about hardening what exists and extending the lifecycle, not inventing
       from scratch.</p>
 
-    <!-- MAINTAINER: roadmap is sourced from marketing/todo.txt. As items ship,
-         move them up a band (Later → Next → Now) or remove them. Keep the
-         "sequence" story intact: onboarding → compliance → payments → search. -->
     <div class="roadmap">
       <div class="rm"><span class="tag now">Now / Built</span><div>
         <h4>Core platform &amp; resume engine</h4>
         <p>Professional &amp; facility accounts, jobs, applications, network, messaging, timesheets, and
           the AI resume parsing/builder are already prototyped.</p></div></div>
-      <div class="rm"><span class="tag next">Next</span><div>
+      <div class="rm"><span class="tag now">Now / Built</span><div>
         <h4>Resume-upload onboarding &amp; auto-anonymization</h4>
-        <p>Let a professional drop in a resume to auto-fill their profile, and generate facility-ready
-          anonymized resumes on demand — the highest-leverage use of the engine.</p></div></div>
+        <p>A professional drops in a resume to auto-fill their profile, and facility-ready anonymized
+          resumes are generated on demand — the highest-leverage use of the engine.</p></div></div>
       <div class="rm"><span class="tag next">Next</span><div>
         <h4>Credential &amp; compliance layer</h4>
-        <p>License/certification expiry alerts and per-facility document checklists — the
-          medical-specific features that separate Locumfy from a generic network.</p></div></div>
+        <p>License and certification expiry alerts, per-facility document checklists, and a planned
+          integration with the Jackson credentialing organization — so verified credentials flow in
+          from an established credentialing partner instead of being re-collected by hand. These are
+          the medical-specific features that separate Locumfy from a generic network.</p></div></div>
       <div class="rm"><span class="tag next">Next</span><div>
         <h4>Get-paid flow</h4>
-        <p>Turn approved timesheets into invoices and payouts, plus earnings and tax summaries —
-          closing the loop from "apply" to "paid."</p></div></div>
+        <p>Turn approved timesheets into invoices and payouts, with full document generation across
+          the billing cycle — facility invoices, professional pay statements, year-end tax forms, and
+          the supporting records both sides need for their books — closing the loop from "apply" to
+          "paid."</p></div></div>
       <div class="rm"><span class="tag later">Later</span><div>
         <h4>Search, notifications &amp; real-time messaging</h4>
-        <p>Richer candidate search for employers, job-match alerts, and live chat to drive daily
-          engagement.</p></div></div>
+        <p>Richer candidate search for employers, live chat, and a broad notification layer covering
+          every part of a professional's career on the platform — matching jobs, application and
+          interview movement, credential and license expiries, timesheet approvals and payments,
+          messages, and network activity — delivered in-app, by email, and by push, and tunable by
+          the user to drive daily engagement without fatigue.</p></div></div>
       <div class="rm"><span class="tag later">Later</span><div>
         <h4>Scheduling, ratings &amp; deeper analytics</h4>
         <p>Shift booking and availability, two-way reviews after assignments, and employer analytics
@@ -809,56 +773,34 @@
   </div>
 </section>
 
-<!-- ======================= ABOUT / MAINTENANCE ======================= -->
-<!-- MAINTAINER: this section is intentionally visible so future editors know
-     how to keep the document current. Prune it before any external-facing use
-     if you'd rather it not show — but keeping it costs nothing internally. -->
+<!-- ======================= ABOUT THIS DOCUMENT ======================= -->
 <section id="about">
   <div class="wrap">
     <div class="eyebrow">About this document</div>
-    <h2 class="title">Keeping this walkthrough current.</h2>
-    <p class="section-lede">This is a living overview meant to evolve with the platform. It is written
-      for business leaders; a separate, deeper technical version exists for engineers.</p>
+    <h2 class="title">What you have just read.</h2>
+    <p class="section-lede">A plain-language walkthrough of Locumfy — what the platform is, the problem
+      it solves, how it works, and where the business value sits on each side of the market.</p>
 
     <div class="cards c2">
       <div class="card">
-        <h4>What this is</h4>
-        <p>A plain-language business walkthrough of Locumfy — purpose, how it works, and the value on
-          each side of the market. Built as a single HTML page with a small folder of screenshots.
-          No internet connection or software is required to open it.</p>
+        <h4>Scope</h4>
+        <p>This document covers the product and the commercial story: the market gap, the professional
+          and facility experiences, the resume and credentialing engine, the network effect, the
+          business model, and the roadmap. It is deliberately non-technical.</p>
       </div>
       <div class="card">
-        <h4>The technical companion</h4>
-        <p>Engineers and architects should use the detailed technical documentation in
-          <code>documentation/tech-docs/</code> (open its <code>index.html</code>). It covers the
-          architecture, data model, APIs, and security in depth.</p>
+        <h4>Where the material comes from</h4>
+        <p>Product screenshots are captured from the working platform. Market context, seed-data
+          figures, and pricing concepts come from Locumfy&rsquo;s own research and prototyping work to
+          date.</p>
       </div>
     </div>
 
-    <h3 class="sub">How to update it (for whoever maintains this)</h3>
-    <p>The whole document is one file, <code>index.html</code>, in this folder. A few notes for future
-      edits — the same guidance is repeated as comments inside the file itself:</p>
-    <div class="steps">
-      <div class="step"><div class="num"></div><div><h4>Edit text in place</h4>
-        <p>Open <code>index.html</code> in any text editor. Each part of the page is a
-          <code>&lt;section&gt;</code> with a clear heading — find the wording and change it.</p></div></div>
-      <div class="step"><div class="num"></div><div><h4>Refresh screenshots</h4>
-        <p>Replace the images in <code>assets/img/</code>, keeping the same filenames. Originals live
-          in <code>../../marketing/</code>.</p></div></div>
-      <div class="step"><div class="num"></div><div><h4>Update the roadmap &amp; figures</h4>
-        <p>As features ship, move roadmap items from <em>Later</em> → <em>Next</em> → <em>Now</em>.
-          Replace illustrative numbers with real ones as they become available.</p></div></div>
-      <div class="step"><div class="num"></div><div><h4>Look for the notes</h4>
-        <p>Search the file for <code>MAINTAINER:</code> — these comments flag every spot that will
-          likely need attention as the platform grows (illustrative figures, diagrams, pricing).</p></div></div>
-    </div>
-
-    <div class="callout maint">
-      <b>Maintainer note.</b> Figures marked illustrative (seed-data counts, connection projections,
-      dashboard metrics, and pricing) come from concept research and demo data, not live production.
-      Before showing this to any external party, confirm which numbers can be stated as fact and label
-      the rest as estimates — consistent with the investor-deck conventions in
-      <code>marketing/CLAUDE.md</code>.
+    <div class="callout figures">
+      <b>A note on the figures.</b> Numbers labelled illustrative in this document — seed-data counts,
+      projected connections, dashboard metrics, and pricing tiers — are drawn from concept research and
+      demonstration data rather than live production activity. They are shown to convey scale and
+      intent, and are presented as estimates, not as reported results.
     </div>
   </div>
 </section>
@@ -866,9 +808,8 @@
 <footer>
   <div class="wrap">
     <div><b>Locumfy</b> — Connecting medical professionals with healthcare facilities.<br>
-      Business walkthrough · prepared for leadership &amp; decision-makers.</div>
-    <div>Internal document · figures marked illustrative are estimates.<br>
-      Technical docs: <a href="../tech-docs/index.html" style="color:#8fb6ff;font-weight:700">../tech-docs/index.html</a></div>
+      Platform walkthrough · prepared for investors &amp; partners.</div>
+    <div>Confidential · figures marked illustrative are estimates.</div>
   </div>
 </footer>
 
